@@ -1,0 +1,9 @@
+@import url('./citas_tecnicas_agregar.css');
+
+button {
+  background: #4caf50;
+}
+
+button:hover {
+  background: #43a047;
+}

@@ -1,0 +1,165 @@
+/* === ESTRUCTURA GENERAL === */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f6f9;
+}
+
+.contenedor {
+  display: flex;
+  height: 100vh;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  width: 240px;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  color: #fff;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.logo i {
+  font-size: 1.5rem;
+  color: #00bcd4;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #d0d0d0;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.activo {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding-left: 16px;
+}
+
+.sidebar nav a i {
+  font-size: 1.2rem;
+  color: #00bcd4;
+}
+
+/* === CONTENIDO PRINCIPAL === */
+.contenido {
+  flex: 1;
+  padding: 3rem;
+  background: #f9fafc;
+}
+
+h1 {
+  color: #1a1a2e;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* === FORMULARIO === */
+.formulario {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+}
+
+.formulario label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #16213e;
+}
+
+.formulario input,
+.formulario textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  resize: none;
+}
+
+.acciones-form {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* === BOTONES === */
+.btn-guardar {
+  background: #00bcd4;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.btn-cancelar {
+  background: #6c757d;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.btn-guardar:hover {
+  background: #0097a7;
+}
+
+.btn-cancelar:hover {
+  background: #5a6268;
+}
+
+/* === ADAPTABILIDAD === */
+@media (max-width: 768px) {
+  .contenedor {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .contenido {
+    padding: 1.5rem;
+  }
+
+  .formulario {
+    padding: 1.5rem;
+  }
+}

@@ -1,0 +1,330 @@
+/* ========== RESET BÁSICO ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f6fa;
+  color: #333;
+  line-height: 1.6;
+}
+/* ====== NAVBAR ====== */
+.barra-navegacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: #0056d2;
+  font-size: 20px;
+}
+
+.logo i {
+  margin-right: 8px;
+  font-size: 22px;
+}
+
+.barra-busqueda input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 300px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: #0056d2;
+}
+
+nav i {
+  cursor: pointer;
+  font-size: 20px;
+  color: #333;
+  transition: color 0.2s;
+}
+
+nav i:hover {
+  color: #0056d2;
+}
+
+
+/* ========== HERO ========== */
+.hero {
+  background: linear-gradient(to right, #007bff, #00c6ff);
+  color: #fff;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.hero .resaltado {
+  color: yellow;
+  font-weight: bold;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 25px;
+}
+
+.botones-hero {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-primario,
+.btn-secundario,
+.btn-oferta {
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primario {
+  background: #ff5722;
+  color: white;
+}
+
+.btn-primario:hover {
+  background: #e64a19;
+}
+
+.btn-oferta {
+  background: #ffffff;
+  color: #007bff;
+  border: 2px solid #007bff;
+}
+
+.btn-oferta:hover {
+  background: #007bff;
+  color: white;
+}
+
+/* ========== BENEFICIOS ========== */
+.beneficios {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 50px 40px;
+  background: #fff;
+}
+
+.beneficio {
+  text-align: center;
+}
+
+.beneficio i {
+  font-size: 40px;
+  color: #007bff;
+  margin-bottom: 15px;
+}
+
+.beneficio h3 {
+  margin-bottom: 10px;
+}
+
+/* ========== CATEGORÍAS ========== */
+.categorias {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.categorias h2 {
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #222;
+}
+
+.grid-categorias {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.tarjeta-categoria {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.tarjeta-categoria:hover {
+  transform: translateY(-8px);
+}
+
+.tarjeta-categoria img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.tarjeta-categoria span {
+  display: block;
+  padding: 12px;
+  font-weight: bold;
+}
+
+/* ========== DESTACADOS ========== */
+.destacados {
+  padding: 60px 40px;
+  background: #fff;
+  text-align: center;
+}
+
+.destacados h2 {
+  margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.grid-productos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.tarjeta-producto {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  position: relative;
+  transition: transform 0.3s;
+}
+
+.tarjeta-producto:hover {
+  transform: translateY(-8px);
+}
+
+.tarjeta-producto img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.etiqueta {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #ff3d00;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.precio {
+  font-size: 1.2rem;
+  color: #007bff;
+  margin: 8px 0;
+}
+
+.precio-anterior {
+  text-decoration: line-through;
+  color: gray;
+  font-size: 0.9rem;
+  margin-left: 8px;
+}
+
+.acciones-producto {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-secundario {
+  background: #eee;
+  color: #333;
+}
+
+.btn-ver-todo {
+  margin-top: 25px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #007bff;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-ver-todo:hover {
+  background: #0056b3;
+}
+
+/* ========== SUSCRIPCIÓN ========== */
+.suscripcion {
+  text-align: center;
+  padding: 60px 40px;
+  background: linear-gradient(to right, #00c6ff, #007bff);
+  color: white;
+}
+
+.suscripcion h2 {
+  margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.form-suscripcion {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.form-suscripcion input {
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.form-suscripcion button {
+  background: #ff5722;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-suscripcion button:hover {
+  background: #e64a19;
+}

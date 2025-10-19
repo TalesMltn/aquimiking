@@ -1,0 +1,50 @@
+@import url('./ventas.css');
+
+/* Reutiliza el diseño base y agrega estilos de formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+}
+
+label {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+input {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 5px;
+  font-size: 0.95rem;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.btn-guardar {
+  background: #00bcd4;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-cancelar {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-guardar:hover { background: #0097a7; }
+.btn-cancelar:hover { background: #b02a37; }

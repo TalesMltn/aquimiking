@@ -1,0 +1,62 @@
+.contenido h1 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.acciones {
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #00bcd4;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #0097a7;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background: #16213e;
+  color: #fff;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background: #f4f6f9;
+}
+
+.btn-edit {
+  color: #1a73e8;
+  font-size: 1.2rem;
+}
+
+.btn-eliminar {
+  color: #e74c3c;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.btn-eliminar:hover {
+  color: #c0392b;
+}

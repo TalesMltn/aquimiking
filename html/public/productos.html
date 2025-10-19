@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos - Techmerch</title>
+  <link rel="stylesheet" href="../../style/public/producto.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body>
+
+  <header class="barra-navegacion">
+  <div class="logo">
+    <i class="bi bi-laptop"></i> TecMerch
+  </div>
+
+  <div class="barra-busqueda">
+    <input type="text" placeholder="Buscar productos...">
+  </div>
+
+  <nav>
+    <a href="./index.html">Inicio</a>
+    <a href="./productos.html">Productos</a>
+    <a href="./contacto.html">Contacto</a>
+    <a href="./serviciotecnico.html">Servicio Técnico</a>
+    <a href="./login/login.html">Login</a>
+    <i class="bi bi-cart3"></i>
+  </nav>
+</header>
+
+  <section class="productos">
+    <h1>Nuestros Productos</h1>
+    <p>Explora nuestra selección de equipos de última generación</p>
+
+    <!-- 🔍 Filtro -->
+    <div class="filtro">
+      <label for="marca">Filtrar por marca:</label>
+      <select id="marca" onchange="filtrarProductos()">
+        <option value="todos">Todos</option>
+        <option value="apple">Apple</option>
+        <option value="asus">ASUS</option>
+        <option value="dell">Dell</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+
+    <div class="grid-productos" id="lista-productos">
+      <div class="tarjeta-producto" data-marca="apple">
+        <img src="../../img/MacBook Pro 16M3 Max.jpg" alt="MacBook Pro">
+        <h3>MacBook Pro 16” M3 Max</h3>
+        <p class="marca">Apple</p>
+        <p class="precio">$2499</p>
+        <button class="btn-primario"><i class="bi bi-cart-plus"></i> Añadir al Carrito</button>
+      </div>
+
+      <div class="tarjeta-producto" data-marca="asus">
+        <img src="../../img/ASUS ROG Strix G15 Gaming.jpg" alt="ASUS ROG">
+        <h3>ASUS ROG Strix G15</h3>
+        <p class="marca">ASUS</p>
+        <p class="precio">$1799</p>
+        <button class="btn-primario"><i class="bi bi-cart-plus"></i> Añadir al Carrito</button>
+      </div>
+
+      <div class="tarjeta-producto" data-marca="dell">
+        <img src="../../img/Dell XPS 15 OLED.jpg" alt="Dell XPS">
+        <h3>Dell XPS 15 OLED</h3>
+        <p class="marca">Dell</p>
+        <p class="precio">$1599</p>
+        <button class="btn-primario"><i class="bi bi-cart-plus"></i> Añadir al Carrito</button>
+      </div>
+
+      <div class="tarjeta-producto" data-marca="custom">
+        <img src="../../img/Custom Gaming Desktop RTX 4080.jpg" alt="PC Gamer">
+        <h3>Custom Gaming RTX 4080</h3>
+        <p class="marca">Custom</p>
+        <p class="precio">$2999</p>
+        <button class="btn-primario"><i class="bi bi-cart-plus"></i> Añadir al Carrito</button>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,162 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f5f7fa;
+}
+/* ====== NAVBAR ====== */
+.barra-navegacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: #0056d2;
+  font-size: 20px;
+}
+
+.logo i {
+  margin-right: 8px;
+  font-size: 22px;
+}
+
+.barra-busqueda input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 300px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: #0056d2;
+}
+
+nav i {
+  cursor: pointer;
+  font-size: 20px;
+  color: #333;
+  transition: color 0.2s;
+}
+
+nav i:hover {
+  color: #0056d2;
+}
+
+
+/* Productos */
+.productos {
+  padding: 2rem;
+  text-align: center;
+}
+
+.productos h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+
+.productos p {
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+/* Filtro */
+.filtro {
+  margin-bottom: 2rem;
+}
+
+.filtro label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.filtro select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Grid de productos */
+.grid-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.tarjeta-producto {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.tarjeta-producto:hover {
+  transform: translateY(-5px);
+}
+
+.tarjeta-producto img {
+  max-width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.tarjeta-producto h3 {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.tarjeta-producto .marca {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 0.5rem;
+}
+
+.tarjeta-producto .precio {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #0077ff;
+  margin-bottom: 1rem;
+}
+
+.btn-primario {
+  background: #0077ff;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primario:hover {
+  background: #005fcc;
+}
