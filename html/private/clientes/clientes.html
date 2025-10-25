@@ -8,7 +8,6 @@
 </head>
 <body>
   <div class="contenedor">
-
     <aside class="sidebar">
       <div class="logo">
         <i class="bi bi-laptop"></i>
@@ -31,7 +30,7 @@
         <a href="clientes_agregar.html" class="btn-agregar"><i class="bi bi-person-plus"></i> Agregar Cliente</a>
       </div>
 
-      <table>
+      <table id="tablaClientes">
         <thead>
           <tr>
             <th>ID</th>
@@ -42,33 +41,64 @@
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>001</td>
-            <td>Juan Pérez</td>
-            <td>76543210</td>
-            <td>juanperez@gmail.com</td>
-            <td>987654321</td>
-            <td>
-              <a href="clientes_editar.html" class="btn-editar"><i class="bi bi-pencil"></i></a>
-              <a href="#" class="btn-eliminar"><i class="bi bi-trash"></i></a>
-            </td>
-          </tr>
-          <tr>
-            <td>002</td>
-            <td>Ana Gómez</td>
-            <td>74859632</td>
-            <td>anagomez@gmail.com</td>
-            <td>912345678</td>
-            <td>
-              <a href="clientes_editar.html" class="btn-editar"><i class="bi bi-pencil"></i></a>
-              <a href="#" class="btn-eliminar"><i class="bi bi-trash"></i></a>
-            </td>
-          </tr>
-        </tbody>
+        <tbody></tbody>
       </table>
     </main>
-
   </div>
+
+  <!-- JAVASCRIPT: CARGAR Y ELIMINAR -->
+  <script>
+    const tbody = document.querySelector('#tablaClientes tbody');
+    const LS_KEY = 'clientes';
+
+    // Cargar clientes desde localStorage
+    function cargar() {
+      return JSON.parse(localStorage.getItem(LS_KEY)) || [];
+    }
+
+    // Guardar en localStorage
+    function guardar(arr) {
+      localStorage.setItem(LS_KEY, JSON.stringify(arr));
+    }
+
+    // Renderizar tabla
+    function render() {
+      const clientes = cargar();
+      tbody.innerHTML = '';
+
+      if (clientes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#777;">No hay clientes registrados.</td></tr>';
+        return;
+      }
+
+      clientes.forEach(c => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${c.id}</td>
+            <td>${c.nombre}</td>
+            <td>${c.dni}</td>
+            <td>${c.correo}</td>
+            <td>${c.telefono}</td>
+            <td>
+              <a href="clientes_editar.html?id=${c.id}" class="btn-editar"><i class="bi bi-pencil"></i></a>
+              <button class="btn-eliminar" data-id="${c.id}"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>`;
+      });
+
+      // Eliminar cliente
+      document.querySelectorAll('.btn-eliminar').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.id;
+          if (confirm(`¿Eliminar cliente ${id}?`)) {
+            guardar(clientes.filter(c => c.id !== id));
+            render();
+          }
+        };
+      });
+    }
+
+    render();
+  </script>
 </body>
 </html>

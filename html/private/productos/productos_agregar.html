@@ -5,10 +5,27 @@
   <title>Agregar Producto - TecMerch</title>
   <link rel="stylesheet" href="../../../style/private/productos/productos_agregar.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    select, input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    optgroup {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .formulario-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  </style>
 </head>
 <body>
   <div class="contenedor">
-
     <aside class="sidebar">
       <div class="logo">
         <i class="bi bi-laptop"></i>
@@ -28,15 +45,57 @@
       <div class="formulario-container">
         <h1><i class="bi bi-plus-circle"></i> Agregar Producto</h1>
 
-        <form>
+        <form id="formAgregar">
           <label>Nombre del producto:</label>
-          <input type="text" placeholder="Ej. Laptop Gamer">
+          <select id="nombre" required>
+            <option value="" disabled selected>Selecciona un producto...</option>
+
+            <optgroup label="Laptops">
+              <option value="Alienware m15" data-categoria="Laptop Gamer" data-precio="8000">Alienware m15</option>
+              <option value="MacBook Air (M1)" data-categoria="Laptop Ultrabook" data-precio="4000">MacBook Air (M1)</option>
+              <option value="HP Pavilion 15" data-categoria="Laptop de Uso General" data-precio="2500">HP Pavilion 15</option>
+              <option value="Microsoft Surface Book 3" data-categoria="Laptop Convertible (2 en 1)" data-precio="6000">Microsoft Surface Book 3</option>
+              <option value="Dell XPS 13" data-categoria="Laptop Ultrabook" data-precio="5000">Dell XPS 13</option>
+              <option value="Razer Blade 15" data-categoria="Laptop Gamer" data-precio="7000">Razer Blade 15</option>
+              <option value="Lenovo ThinkPad X1 Carbon" data-categoria="Laptop para Negocios" data-precio="5500">Lenovo ThinkPad X1 Carbon</option>
+              <option value="Asus VivoBook 15" data-categoria="Laptop de Uso General" data-precio="2000">Asus VivoBook 15</option>
+              <option value="Apple MacBook Pro 16”" data-categoria="Laptop para Diseño Gráfico/Edición de Video" data-precio="10000">Apple MacBook Pro 16”</option>
+              <option value="HP Spectre x360" data-categoria="Laptop Convertible (2 en 1)" data-precio="4500">HP Spectre x360</option>
+            </optgroup>
+
+            <optgroup label="PCs de Escritorio">
+              <option value="Alienware Aurora R12" data-categoria="PC de Escritorio Gamer" data-precio="9000">Alienware Aurora R12</option>
+              <option value="Apple iMac 27”" data-categoria="PC de Escritorio para Profesionales Creativos" data-precio="8000">Apple iMac 27”</option>
+              <option value="HP Envy 32 All-in-One" data-categoria="PC Todo-en-Uno (All-in-One)" data-precio="7000">HP Envy 32 All-in-One</option>
+              <option value="Lenovo ThinkCentre M920" data-categoria="PC de Escritorio para Negocios" data-precio="3000">Lenovo ThinkCentre M920</option>
+              <option value="Corsair Vengeance i7200" data-categoria="PC de Escritorio Gamer" data-precio="8500">Corsair Vengeance i7200</option>
+              <option value="MSI Trident X Plus" data-categoria="PC de Escritorio Gamer" data-precio="6000">MSI Trident X Plus</option>
+              <option value="HP ProDesk 400 G6" data-categoria="PC de Escritorio para Oficina" data-precio="2500">HP ProDesk 400 G6</option>
+              <option value="Dell OptiPlex 7080" data-categoria="PC de Escritorio para Oficina" data-precio="3500">Dell OptiPlex 7080</option>
+              <option value="Microsoft Surface Studio 2" data-categoria="PC de Escritorio para Diseño Gráfico/Edición de Video" data-precio="12000">Microsoft Surface Studio 2</option>
+              <option value="CyberPowerPC Gamer Xtreme VR" data-categoria="PC de Escritorio Gamer" data-precio="5000">CyberPowerPC Gamer Xtreme VR</option>
+            </optgroup>
+          </select>
 
           <label>Categoría:</label>
-          <input type="text" placeholder="Ej. Portátiles">
+          <select id="categoria" required>
+            <option value="" disabled selected>Selecciona una categoría...</option>
+            <option value="Laptop Gamer">Laptop Gamer</option>
+            <option value="Laptop Ultrabook">Laptop Ultrabook</option>
+            <option value="Laptop de Uso General">Laptop de Uso General</option>
+            <option value="Laptop Convertible (2 en 1)">Laptop Convertible (2 en 1)</option>
+            <option value="Laptop para Negocios">Laptop para Negocios</option>
+            <option value="Laptop para Diseño Gráfico/Edición de Video">Laptop para Diseño Gráfico/Edición de Video</option>
+            <option value="PC de Escritorio Gamer">PC de Escritorio Gamer</option>
+            <option value="PC de Escritorio para Profesionales Creativos">PC de Escritorio para Profesionales Creativos</option>
+            <option value="PC Todo-en-Uno (All-in-One)">PC Todo-en-Uno (All-in-One)</option>
+            <option value="PC de Escritorio para Negocios">PC de Escritorio para Negocios</option>
+            <option value="PC de Escritorio para Oficina">PC de Escritorio para Oficina</option>
+            <option value="PC de Escritorio para Diseño Gráfico/Edición de Video">PC de Escritorio para Diseño Gráfico/Edición de Video</option>
+          </select>
 
           <label>Precio (S/):</label>
-          <input type="number" placeholder="Ej. 4500">
+          <input type="number" id="precio" placeholder="Ej. 4500" min="0" step="0.01" required>
 
           <div class="botones">
             <a href="productos.html" class="btn-volver"><i class="bi bi-arrow-left-circle"></i> Volver</a>
@@ -45,7 +104,52 @@
         </form>
       </div>
     </main>
-
   </div>
+
+  <script>
+    // === Generar ID automático (P001, P002...) ===
+    function generarId() {
+      const productos = JSON.parse(localStorage.getItem("productos")) || [];
+      const ids = productos.map(p => parseInt(p.id.replace("P", "")) || 0);
+      const max = ids.length > 0 ? Math.max(...ids) : 0;
+      return "P" + String(max + 1).padStart(3, "0");
+    }
+
+    const nombreSelect = document.getElementById("nombre");
+    const categoriaSelect = document.getElementById("categoria");
+    const precioInput = document.getElementById("precio");
+
+    // === Auto-seleccionar categoría y precio al elegir nombre ===
+    nombreSelect.addEventListener("change", function() {
+      const selected = this.options[this.selectedIndex];
+      const categoria = selected.getAttribute("data-categoria");
+      const precio = selected.getAttribute("data-precio");
+
+      if (categoria) categoriaSelect.value = categoria;
+      if (precio) precioInput.value = precio;
+    });
+
+    // === Guardar producto ===
+    document.getElementById("formAgregar").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById("nombre").value;
+      const categoria = document.getElementById("categoria").value;
+      const precio = parseFloat(document.getElementById("precio").value).toFixed(2);
+
+      if (!nombre || !categoria || !precio || precio <= 0) {
+        alert("Completa todos los campos.");
+        return;
+      }
+
+      const nuevo = { id: generarId(), nombre, categoria, precio };
+      const productos = JSON.parse(localStorage.getItem("productos")) || [];
+      productos.push(nuevo);
+      localStorage.setItem("productos", JSON.stringify(productos));
+
+      alert(`Producto ${nuevo.id} agregado.`);
+      window.location.href = "productos.html";
+    });
+  </script>
 </body>
 </html>

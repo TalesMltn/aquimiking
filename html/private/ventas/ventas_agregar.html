@@ -5,14 +5,20 @@
   <title>Agregar Venta - TecMerch</title>
   <link rel="stylesheet" href="../../../style/private/ventas/ventas_agregar.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    .autocomplete { position: relative; display: inline-block; width: 100%; }
+    .autocomplete-items { 
+      position: absolute; border: 1px solid #ccc; border-top: none; z-index: 99; 
+      top: 100%; left: 0; right: 0; background: white; max-height: 150px; overflow-y: auto;
+    }
+    .autocomplete-items div { padding: 10px; cursor: pointer; }
+    .autocomplete-items div:hover { background: #f0f0f0; }
+  </style>
 </head>
 <body>
   <div class="contenedor">
     <aside class="sidebar">
-      <div class="logo">
-        <i class="bi bi-laptop"></i>
-        <span>TecMerch</span>
-      </div>
+      <div class="logo"><i class="bi bi-laptop"></i><span>TecMerch</span></div>
       <nav>
         <a href="ventas.html" class="activo"><i class="bi bi-cart"></i> Ventas</a>
         <a href="../productos/productos.html"><i class="bi bi-box-seam"></i> Productos</a>
@@ -25,25 +31,160 @@
 
     <main class="contenido">
       <h1><i class="bi bi-plus-circle"></i> Agregar Venta</h1>
-      <form>
+      <form id="formVenta">
+        <!-- CLIENTE CON AUTOCOMPLETADO -->
         <label>Cliente:</label>
-        <input type="text" placeholder="Nombre del cliente">
+        <div class="autocomplete">
+          <input type="text" id="clienteInput" placeholder="Escribe nombre o DNI..." autocomplete="off">
+          <div id="autocomplete-list"></div>
+        </div>
+        <input type="hidden" id="clienteId">
 
+        <!-- CATEGORÍA (se llena automáticamente) -->
+        <label>Categoría:</label>
+        <select id="categoria" required>
+          <option value="" disabled selected>Selecciona un producto primero...</option>
+        </select>
+
+        <!-- PRODUCTO (con data-categoria y data-precio) -->
         <label>Producto:</label>
-        <input type="text" placeholder="Producto vendido">
+        <select id="producto" required>
+          <option value="" disabled selected>Selecciona un producto...</option>
+        </select>
+
+        <!-- PRECIO (readonly, se carga automáticamente) -->
+        <label>Precio (S/):</label>
+        <input type="number" id="precio" readonly>
 
         <label>Fecha:</label>
-        <input type="date">
-
-        <label>Total (S/):</label>
-        <input type="number" placeholder="Monto total">
+        <input type="date" id="fecha" required>
 
         <div class="botones">
-          <a href="ventas.html" class="btn-guardar"><i class="bi bi-save"></i> Guardar</a>
+          <button type="submit" class="btn-guardar"><i class="bi bi-save"></i> Guardar</button>
           <a href="ventas.html" class="btn-cancelar"><i class="bi bi-x-circle"></i> Cancelar</a>
         </div>
       </form>
     </main>
   </div>
+
+  <script>
+    // === CARGAR DATOS ===
+    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    const productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+    const inputCliente = document.getElementById("clienteInput");
+    const hiddenCliente = document.getElementById("clienteId");
+    const autocompleteList = document.getElementById("autocomplete-list");
+    const categoriaSelect = document.getElementById("categoria");
+    const productoSelect = document.getElementById("producto");
+    const precioInput = document.getElementById("precio");
+
+    // === AUTOCOMPLETADO DE CLIENTES ===
+    inputCliente.addEventListener("input", function() {
+      const val = this.value.toLowerCase();
+      autocompleteList.innerHTML = "";
+      if (!val) return;
+
+      const matches = clientes.filter(c => 
+        c.nombre.toLowerCase().includes(val) || c.dni.includes(val)
+      );
+
+      matches.forEach(c => {
+        const div = document.createElement("div");
+        div.innerHTML = `<strong>${c.nombre}</strong> (DNI: ${c.dni})`;
+        div.addEventListener("click", () => {
+          inputCliente.value = c.nombre;
+          hiddenCliente.value = c.id;
+          autocompleteList.innerHTML = "";
+        });
+        autocompleteList.appendChild(div);
+      });
+    });
+
+    // === CARGAR PRODUCTOS CON DATA-ATTRIBUTES ===
+    productos.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = p.nombre;
+      opt.dataset.categoria = p.categoria;
+      opt.dataset.precio = p.precio;
+      productoSelect.appendChild(opt);
+    });
+
+    // === AL CAMBIAR PRODUCTO → AUTO-SELECCIONA CATEGORÍA Y PRECIO ===
+    productoSelect.addEventListener("change", function() {
+      const selected = this.options[this.selectedIndex];
+      const cat = selected.dataset.categoria;
+      const precio = selected.dataset.precio;
+
+      // Auto-seleccionar categoría
+      const catExists = Array.from(categoriaSelect.options).some(o => o.value === cat);
+      if (catExists) {
+        categoriaSelect.value = cat;
+      } else {
+        // Si no existe (por error), crea temporalmente
+        const tempOpt = document.createElement("option");
+        tempOpt.value = cat;
+        tempOpt.textContent = cat;
+        categoriaSelect.appendChild(tempOpt);
+        categoriaSelect.value = cat;
+      }
+
+      // Auto-cargar precio
+      precioInput.value = precio || "";
+    });
+
+    // === CARGAR CATEGORÍAS ÚNICAS (opcional, para consistencia) ===
+    const categorias = [...new Set(productos.map(p => p.categoria))];
+    categorias.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      categoriaSelect.appendChild(opt);
+    });
+
+    // === GENERAR ID DE VENTA ===
+    function generarId() {
+      const ventas = JSON.parse(localStorage.getItem("ventas")) || [];
+      const max = ventas.reduce((m, v) => Math.max(m, parseInt(v.id.replace("V", "")) || 0), 0);
+      return "V" + String(max + 1).padStart(3, "0");
+    }
+
+    // === GUARDAR VENTA ===
+    document.getElementById("formVenta").onsubmit = function(e) {
+      e.preventDefault();
+
+      const clienteId = hiddenCliente.value;
+      const productoId = productoSelect.value;
+      const fecha = document.getElementById("fecha").value;
+      const precio = precioInput.value;
+
+      if (!clienteId || !productoId || !fecha || !precio) {
+        alert("Completa todos los campos.");
+        return;
+      }
+
+      const cliente = clientes.find(c => c.id === clienteId);
+      const producto = productos.find(p => p.id === productoId);
+
+      const nuevaVenta = {
+        id: generarId(),
+        clienteId,
+        clienteNombre: cliente.nombre,
+        productoId,
+        productoNombre: producto.nombre,
+        categoria: producto.categoria,
+        fecha,
+        total: parseFloat(precio).toFixed(2)
+      };
+
+      const ventas = JSON.parse(localStorage.getItem("ventas")) || [];
+      ventas.push(nuevaVenta);
+      localStorage.setItem("ventas", JSON.stringify(ventas));
+
+      alert(`Venta ${nuevaVenta.id} registrada: ${producto.nombre} → S/ ${nuevaVenta.total}`);
+      window.location.href = "ventas.html";
+    };
+  </script>
 </body>
 </html>

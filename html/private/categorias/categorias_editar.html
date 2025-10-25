@@ -1,46 +1,55 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Editar Categoría - TecMerch</title>
-  <link rel="stylesheet" href="../../../style/private/categorias/categorias_editar.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-</head>
-<body>
-  <div class="contenedor">
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) {
+    alert("Error: Falta el ID de la categoría.");
+    window.location.href = "categorias.html";
+    throw new Error("ID no proporcionado"); // Detiene ejecución
+  }
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="logo">
-        <i class="bi bi-shop"></i> TecMerch
-      </div>
-       <nav>
-        <a href="../ventas/ventas.html"><i class="bi bi-cart"></i> Ventas</a>
-        <a href="../productos/productos.html"><i class="bi bi-box-seam"></i> Productos</a>
-        <a href="../clientes/clientes.html"><i class="bi bi-people"></i> Clientes</a>
-        <a href="categorias.html" class="activo"><i class="bi bi-tags"></i> Categorías</a>
-        <a href="../reportes.html"><i class="bi bi-file-earmark-bar-graph"></i> Reportes</a>
-        <a href="../citas_tecnicas/citas_tecnicas.html"><i class="bi bi-tools"></i> Citas Técnicas</a>
-      </nav>
-    </aside>
+  const categorias = JSON.parse(localStorage.getItem("categorias")) || [];
+  const categoria = categorias.find(c => c.id === id);
+  if (!categoria) {
+    alert("Categoría no encontrada.");
+    window.location.href = "categorias.html";
+  }
 
-    <!-- Contenido -->
-    <main class="contenido">
-      <h1><i class="bi bi-pencil-square"></i> Editar Categoría</h1>
+  // Rellenar formulario
+  document.getElementById("id").value = categoria.id;
+  document.getElementById("nombre").value = categoria.nombre;
+  document.getElementById("descripcion").value = categoria.descripcion;
 
-      <form class="formulario">
-        <label for="nombre">Nombre de la categoría</label>
-        <input type="text" id="nombre" name="nombre" value="Tecnología" required>
+  // Guardar cambios
+  document.getElementById("formEditar").onsubmit = function(e) {
+    e.preventDefault();
 
-        <label for="descripcion">Descripción</label>
-        <input type="text" id="descripcion" name="descripcion" value="Artículos electrónicos y gadgets" required>
+    const nuevoNombre = document.getElementById("nombre").value.trim();
+    const descripcion = document.getElementById("descripcion").value.trim();
 
-        <div class="acciones-form">
-          <a href="categorias.html" class="btn-cancelar">Cancelar</a>
-          <button type="submit" class="btn-guardar">Actualizar</button>
-        </div>
-      </form>
-    </main>
-  </div>
-</body>
-</html>
+    if (!nuevoNombre || !descripcion) {
+      alert("Completa todos los campos.");
+      return;
+    }
+
+    if (categorias.some(c => c.id !== id && c.nombre.toLowerCase() === nuevoNombre.toLowerCase())) {
+      alert("Ya existe una categoría con ese nombre.");
+      return;
+    }
+
+    const indice = categorias.findIndex(c => c.id === id);
+    const viejoNombre = categorias[indice].nombre;
+
+    categorias[indice] = { id, nombre: nuevoNombre, descripcion };
+    localStorage.setItem("c |ategorias", JSON.stringify(categorias));
+
+    // Actualizar productos
+    const productos = JSON.parse(localStorage.getItem("productos")) || [];
+    productos.forEach(p => {
+      if (p.categoria === viejoNombre) p.categoria = nuevoNombre;
+    });
+    localStorage.setItem("productos", JSON.stringify(productos));
+
+    alert("Categoría actualizada.");
+    window.location.href = "categorias.html";
+  };
+</script>

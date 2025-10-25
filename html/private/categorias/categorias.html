@@ -5,16 +5,107 @@
   <title>Categorías - TecMerch</title>
   <link rel="stylesheet" href="../../../style/private/categorias/categorias.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    /* === COLORES PRINCIPALES === */
+    :root {
+      --azul-oscuro: #2c3e50;
+      --texto-blanco: #ffffff;
+      --hover-fila: #eef2f7;
+      --verde: #27ae60;
+      --rojo: #e74c3c;
+      --borde: #dee2e6;
+    }
+
+    /* === TABLA === */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* ENCABEZADOS CON FONDO #2c3e50 */
+    th {
+      background-color: var(--azul-oscuro);   /* FONDO AZUL OSCURO */
+      color: var(--texto-blanco, #ffffff);     /* TEXTO BLANCO */
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--borde);
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e9ecef;
+      color: #495057;
+    }
+
+    tr:hover {
+      background-color: var(--hover-fila);
+      transition: background 0.2s ease;
+    }
+
+    /* === BOTONES DE ACCIÓN === */
+    .btn-editar {
+      color: var(--azul-oscuro);
+      font-size: 1.3rem;
+      margin-right: 12px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .btn-editar:hover {
+      color: #1a252f;
+    }
+
+    .btn-eliminar {
+      color: var(--rojo);
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .btn-eliminar:hover {
+      color: #c0392b;
+    }
+
+    /* === BOTÓN AGREGAR - CELESTE COMO EL RESTO === */
+.btn-agregar {
+  background: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+  transition: all 0.2s;
+}
+.btn-agregar:hover {
+  background: #2980b9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+}
+
+    .acciones {
+      margin: 20px 0;
+    }
+  </style>
 </head>
 <body>
   <div class="contenedor">
-
     <aside class="sidebar">
       <div class="logo">
-        <i class="bi bi-laptop"></i>
-        <span>TecMerch</span>
+        <i class="bi bi-shop"></i> TecMerch
       </div>
-       <nav>
+      <nav>
         <a href="../ventas/ventas.html"><i class="bi bi-cart"></i> Ventas</a>
         <a href="../productos/productos.html"><i class="bi bi-box-seam"></i> Productos</a>
         <a href="../clientes/clientes.html"><i class="bi bi-people"></i> Clientes</a>
@@ -26,12 +117,13 @@
 
     <main class="contenido">
       <h1><i class="bi bi-tags"></i> Categorías</h1>
-
       <div class="acciones">
-        <a href="categorias_agregar.html" class="btn-agregar"><i class="bi bi-plus-circle"></i> Agregar Categoría</a>
+        <a href="categorias_agregar.html" class="btn-agregar">
+          <i class="bi bi-plus-circle"></i> Agregar Categoría
+        </a>
       </div>
 
-      <table>
+      <table id="tablaCategorias">
         <thead>
           <tr>
             <th>ID</th>
@@ -40,29 +132,61 @@
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>001</td>
-            <td>Portátiles</td>
-            <td>Equipos de alto rendimiento para trabajo y gaming.</td>
-            <td>
-              <a href="categorias_editar.html" class="btn-editar"><i class="bi bi-pencil"></i></a>
-              <a href="#" class="btn-eliminar"><i class="bi bi-trash"></i></a>
-            </td>
-          </tr>
-          <tr>
-            <td>002</td>
-            <td>Accesorios</td>
-            <td>Periféricos y accesorios de computadora.</td>
-            <td>
-              <a href="categorias_editar.html" class="btn-editar"><i class="bi bi-pencil"></i></a>
-              <a href="#" class="btn-eliminar"><i class="bi bi-trash"></i></a>
-            </td>
-          </tr>
-        </tbody>
+        <tbody></tbody>
       </table>
     </main>
-
   </div>
+
+  <script>
+    const tbody = document.querySelector('#tablaCategorias tbody');
+    const LS_KEY = 'categorias';
+
+    function render() {
+      const categorias = JSON.parse(localStorage.getItem(LS_KEY)) || [];
+      tbody.innerHTML = '';
+
+      if (categorias.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#777; padding: 30px;">No hay categorías registradas.</td></tr>';
+        return;
+      }
+
+      categorias.forEach(c => {
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${c.id}</strong></td>
+            <td>${c.nombre}</td>
+            <td>${c.descripcion}</td>
+            <td>
+              <a href="categorias_editar.html?id=${c.id}" class="btn-editar" title="Editar">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <button class="btn-eliminar" data-id="${c.id}" title="Eliminar">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>`;
+      });
+
+      document.querySelectorAll('.btn-eliminar').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.id;
+          const cat = categorias.find(c => c.id === id);
+          if (confirm(`¿Eliminar categoría "${cat.nombre}"?`)) {
+            const productos = JSON.parse(localStorage.getItem("productos")) || [];
+            const enUso = productos.some(p => p.categoria === cat.nombre);
+            if (enUso) {
+              alert("No se puede eliminar: hay productos asociados.");
+              return;
+            }
+            const nuevas = categorias.filter(c => c.id !== id);
+            localStorage.setItem(LS_KEY, JSON.stringify(nuevas));
+            render();
+          }
+        };
+      });
+    }
+
+    render();
+  </script>
 </body>
 </html>

@@ -8,7 +8,6 @@
 </head>
 <body>
   <div class="contenedor">
-
     <aside class="sidebar">
       <div class="logo">
         <i class="bi bi-laptop"></i>
@@ -27,18 +26,20 @@
     <main class="contenido">
       <h1><i class="bi bi-pencil"></i> Editar Cliente</h1>
 
-      <form class="formulario">
+      <form id="formEditar" class="formulario">
+        <input type="hidden" id="id">
+
         <label>Nombre completo</label>
-        <input type="text" value="Juan Pérez" required>
+        <input type="text" id="nombre" required>
 
         <label>DNI</label>
-        <input type="text" maxlength="8" value="76543210" required>
+        <input type="text" id="dni" maxlength="8" required>
 
         <label>Correo electrónico</label>
-        <input type="email" value="juanperez@gmail.com" required>
+        <input type="email" id="correo" required>
 
         <label>Teléfono</label>
-        <input type="tel" maxlength="9" value="987654321" required>
+        <input type="tel" id="telefono" maxlength="9" required>
 
         <div class="acciones-form">
           <button type="submit" class="btn-guardar"><i class="bi bi-check-circle"></i> Actualizar</button>
@@ -46,7 +47,62 @@
         </div>
       </form>
     </main>
-
   </div>
+
+  <!-- JAVASCRIPT: CARGAR Y EDITAR -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) {
+      alert("Falta ID del cliente.");
+      window.location.href = "clientes.html";
+    }
+
+    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    const cliente = clientes.find(c => c.id === id);
+    if (!cliente) {
+      alert("Cliente no encontrado.");
+      window.location.href = "clientes.html";
+    }
+
+    // Rellenar formulario
+    document.getElementById("id").value = cliente.id;
+    document.getElementById("nombre").value = cliente.nombre;
+    document.getElementById("dni").value = cliente.dni;
+    document.getElementById("correo").value = cliente.correo;
+    document.getElementById("telefono").value = cliente.telefono;
+
+    // Guardar cambios
+    document.getElementById("formEditar").onsubmit = function(e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById("nombre").value.trim();
+      const dni = document.getElementById("dni").value.trim();
+      const correo = document.getElementById("correo").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+
+      if (!nombre || !dni || !correo || !telefono) {
+        alert("Completa todos los campos.");
+        return;
+      }
+
+      if (dni.length !== 8 || !/^\d+$/.test(dni)) {
+        alert("DNI debe tener 8 dígitos.");
+        return;
+      }
+
+      if (telefono.length !== 9 || !/^\d+$/.test(telefono)) {
+        alert("Teléfono debe tener 9 dígitos.");
+        return;
+      }
+
+      const indice = clientes.findIndex(c => c.id === id);
+      clientes[indice] = { id, nombre, dni, correo, telefono };
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+
+      alert("Cliente actualizado.");
+      window.location.href = "clientes.html";
+    };
+  </script>
 </body>
 </html>

@@ -3,47 +3,270 @@
 <head>
   <meta charset="UTF-8">
   <title>Agregar Cita Técnica - TecMerch</title>
+  <link rel="stylesheet" href="../../../style/private/citas/citas_agregar.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="../../../style/private/sidebar.css">
-  <link rel="stylesheet" href="../../../style/private/citas_tecnicas/citas_tecnicas_agregar.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .contenedor {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 230px;
+      background: #2c3e50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar nav a {
+      color: #ecf0f1;
+      text-decoration: none;
+      display: block;
+      padding: 12px 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+
+    .sidebar nav a:hover,
+    .sidebar nav a.activo {
+      background: #3498db;
+      color: white;
+    }
+
+    .contenido {
+      flex: 1;
+      padding: 40px;
+      background: #ecf0f1;
+      overflow-y: auto;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 25px;
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      max-width: 600px;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 18px;
+      margin-bottom: 6px;
+      color: #2c3e50;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 5px rgba(52,152,219,0.4);
+    }
+
+    /* AUTOCOMPLETADO */
+    #autocompleteList {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      max-height: 180px;
+      overflow-y: auto;
+      z-index: 10;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    #autocompleteList div {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #autocompleteList div:hover {
+      background: #eaf3fc;
+    }
+
+    .botones {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 25px;
+      gap: 12px;
+    }
+
+    .btn-guardar {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 11px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 3px 8px rgba(52, 152, 219, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-guardar:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    .btn-cancelar {
+      background: #bdc3c7;
+      color: #2c3e50;
+      text-decoration: none;
+      padding: 11px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-cancelar:hover {
+      background: #95a5a6;
+      transform: translateY(-2px);
+      color: white;
+    }
+  </style>
 </head>
+
 <body>
   <div class="contenedor">
     <aside class="sidebar">
-      <div class="logo">
-        <i class="bi bi-laptop"></i>
-        <span>TecMerch</span>
-      </div>
+      <div class="logo"><i class="bi bi-laptop"></i><span>TecMerch</span></div>
       <nav>
         <a href="../ventas/ventas.html"><i class="bi bi-cart"></i> Ventas</a>
         <a href="../productos/productos.html"><i class="bi bi-box-seam"></i> Productos</a>
         <a href="../clientes/clientes.html"><i class="bi bi-people"></i> Clientes</a>
         <a href="../categorias/categorias.html"><i class="bi bi-tags"></i> Categorías</a>
         <a href="../reportes.html"><i class="bi bi-file-earmark-bar-graph"></i> Reportes</a>
-        <a href="./citas_tecnicas.html"><i class="bi bi-tools"></i> Citas Técnicas</a>
+        <a href="citas_tecnicas.html" class="activo"><i class="bi bi-tools"></i> Citas Técnicas</a>
       </nav>
     </aside>
 
     <main class="contenido">
-      <div class="formulario">
-        <h1>Agregar Cita Técnica</h1>
-        <form>
-          <label>Cliente</label>
-          <input type="text" placeholder="Nombre del cliente">
+      <h1><i class="bi bi-plus-circle"></i> Agregar Cita Técnica</h1>
 
-          <label>Fecha</label>
-          <input type="date">
+      <form id="formCita">
+        <label>Cliente:</label>
+        <input type="text" id="inputCliente" placeholder="Buscar cliente por nombre o DNI" autocomplete="off" required>
+        <input type="hidden" id="hiddenCliente">
+        <div id="autocompleteList"></div>
 
-          <label>Servicio</label>
-          <input type="text" placeholder="Tipo de servicio">
+        <label>Fecha:</label>
+        <input type="date" id="fecha" required>
 
-          <div class="acciones">
-            <button type="submit">Guardar</button>
-            <a href="citas_tecnicas.html" class="cancelar">Cancelar</a>
-          </div>
-        </form>
-      </div>
+        <label>Servicio:</label>
+        <input type="text" id="servicio" placeholder="Ej. Instalación, Mantenimiento" required>
+
+        <div class="botones">
+          <button type="submit" class="btn-guardar"><i class="bi bi-save"></i> Guardar</button>
+          <a href="citas_tecnicas.html" class="btn-cancelar"><i class="bi bi-x-circle"></i> Cancelar</a>
+        </div>
+      </form>
     </main>
   </div>
+
+  <script>
+    // === Cargar lista de clientes del localStorage ===
+    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    const inputCliente = document.getElementById("inputCliente");
+    const hiddenCliente = document.getElementById("hiddenCliente");
+    const autocompleteList = document.getElementById("autocompleteList");
+
+    // === AUTOCOMPLETADO DE CLIENTES ===
+    inputCliente.addEventListener("input", function() {
+      const val = this.value.toLowerCase();
+      autocompleteList.innerHTML = "";
+      if (!val) return;
+
+      const matches = clientes.filter(c =>
+        c.nombre.toLowerCase().includes(val) || (c.dni && c.dni.includes(val))
+      );
+
+      matches.forEach(c => {
+        const div = document.createElement("div");
+        div.innerHTML = `<strong>${c.nombre}</strong> (DNI: ${c.dni})`;
+        div.addEventListener("click", () => {
+          inputCliente.value = c.nombre;
+          hiddenCliente.value = c.id;
+          autocompleteList.innerHTML = "";
+        });
+        autocompleteList.appendChild(div);
+      });
+    });
+
+    // === Generar nuevo ID incremental ===
+    function generarId() {
+      const citas = JSON.parse(localStorage.getItem("citasTecnicas")) || [];
+      const max = citas.reduce((m, v) => Math.max(m, parseInt(v.id.replace("CT", "")) || 0), 0);
+      return "CT" + String(max + 1).padStart(3, "0");
+    }
+
+    // === Guardar cita ===
+    document.getElementById("formCita").onsubmit = e => {
+      e.preventDefault();
+      const clienteId = hiddenCliente.value;
+      const clienteNombre = inputCliente.value.trim();
+      const fecha = document.getElementById("fecha").value;
+      const servicio = document.getElementById("servicio").value.trim();
+
+      if (!clienteId || !clienteNombre || !fecha || !servicio) {
+        alert("⚠️ Completa todos los campos correctamente.");
+        return;
+      }
+
+      const citas = JSON.parse(localStorage.getItem("citasTecnicas")) || [];
+      const nuevaCita = { id: generarId(), clienteId, clienteNombre, fecha, servicio };
+      citas.push(nuevaCita);
+      localStorage.setItem("citasTecnicas", JSON.stringify(citas));
+
+      alert(`✅ Cita ${nuevaCita.id} creada correctamente para ${clienteNombre}`);
+      window.location.href = "citas_tecnicas.html";
+    };
+  </script>
 </body>
 </html>

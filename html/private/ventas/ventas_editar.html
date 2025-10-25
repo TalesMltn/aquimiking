@@ -5,14 +5,20 @@
   <title>Editar Venta - TecMerch</title>
   <link rel="stylesheet" href="../../../style/private/ventas/ventas_editar.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    .autocomplete { position: relative; display: inline-block; width: 100%; }
+    .autocomplete-items { 
+      position: absolute; border: 1px solid #ccc; border-top: none; z-index: 99; 
+      top: 100%; left: 0; right: 0; background: white; max-height: 150px; overflow-y: auto;
+    }
+    .autocomplete-items div { padding: 10px; cursor: pointer; }
+    .autocomplete-items div:hover { background: #f0f0f0; }
+  </style>
 </head>
 <body>
   <div class="contenedor">
     <aside class="sidebar">
-      <div class="logo">
-        <i class="bi bi-laptop"></i>
-        <span>TecMerch</span>
-      </div>
+      <div class="logo"><i class="bi bi-laptop"></i><span>TecMerch</span></div>
       <nav>
         <a href="ventas.html" class="activo"><i class="bi bi-cart"></i> Ventas</a>
         <a href="../productos/productos.html"><i class="bi bi-box-seam"></i> Productos</a>
@@ -25,28 +31,156 @@
 
     <main class="contenido">
       <h1><i class="bi bi-pencil"></i> Editar Venta</h1>
-      <form>
+      <form id="formEditar">
         <label>ID Venta:</label>
-        <input type="text" value="001" disabled>
+        <input type="text" id="id" disabled>
 
+        <!-- CLIENTE CON AUTOCOMPLETADO -->
         <label>Cliente:</label>
-        <input type="text" value="Juan Pérez">
+        <div class="autocomplete">
+          <input type="text" id="clienteInput" autocomplete="off">
+          <div id="autocomplete-list"></div>
+        </div>
+        <input type="hidden" id="clienteId">
 
+        <!-- CATEGORÍA (auto-seleccionada) -->
+        <label>Categoría:</label>
+        <select id="categoria" required></select>
+
+        <!-- PRODUCTO (con data-categoria y data-precio) -->
         <label>Producto:</label>
-        <input type="text" value="Laptop Gamer">
+        <select id="producto" required></select>
+
+        <!-- PRECIO (readonly, auto-cargado) -->
+        <label>Precio (S/):</label>
+        <input type="number" id="precio" readonly>
 
         <label>Fecha:</label>
-        <input type="date" value="2025-10-09">
-
-        <label>Total (S/):</label>
-        <input type="number" value="4500">
+        <input type="date" id="fecha" required>
 
         <div class="botones">
-          <a href="ventas.html" class="btn-guardar"><i class="bi bi-save"></i> Guardar Cambios</a>
+          <button type="submit" class="btn-guardar"><i class="bi bi-save"></i> Guardar Cambios</button>
           <a href="ventas.html" class="btn-cancelar"><i class="bi bi-x-circle"></i> Cancelar</a>
         </div>
       </form>
     </main>
   </div>
+
+  <script>
+    // === LEER ID DE LA URL ===
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) { alert("Falta ID"); window.location.href = "ventas.html"; }
+
+    // === CARGAR DATOS ===
+    const ventas = JSON.parse(localStorage.getItem("ventas")) || [];
+    const venta = ventas.find(v => v.id === id);
+    if (!venta) { alert("Venta no encontrada"); window.location.href = "ventas.html"; }
+
+    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    const productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+    // === ELEMENTOS ===
+    const inputCliente = document.getElementById("clienteInput");
+    const hiddenCliente = document.getElementById("clienteId");
+    const autocompleteList = document.getElementById("autocomplete-list");
+    const categoriaSelect = document.getElementById("categoria");
+    const productoSelect = document.getElementById("producto");
+    const precioInput = document.getElementById("precio");
+
+    // === RELLENAR CAMPOS INICIALES ===
+    document.getElementById("id").value = venta.id;
+    inputCliente.value = venta.clienteNombre;
+    hiddenCliente.value = venta.clienteId;
+    document.getElementById("fecha").value = venta.fecha;
+
+    // === AUTOCOMPLETADO DE CLIENTES ===
+    inputCliente.addEventListener("input", function() {
+      const val = this.value.toLowerCase();
+      autocompleteList.innerHTML = "";
+      if (!val) return;
+
+      const matches = clientes.filter(c => 
+        c.nombre.toLowerCase().includes(val) || c.dni.includes(val)
+      );
+
+      matches.forEach(c => {
+        const div = document.createElement("div");
+        div.innerHTML = `<strong>${c.nombre}</strong> (DNI: ${c.dni})`;
+        div.onclick = () => {
+          inputCliente.value = c.nombre;
+          hiddenCliente.value = c.id;
+          autocompleteList.innerHTML = "";
+        };
+        autocompleteList.appendChild(div);
+      });
+    });
+
+    // === CARGAR CATEGORÍAS ===
+    const categorias = [...new Set(productos.map(p => p.categoria))];
+    categorias.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      if (cat === venta.categoria) opt.selected = true;
+      categoriaSelect.appendChild(opt);
+    });
+
+    // === CARGAR PRODUCTOS ===
+    productos.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = p.nombre;
+      opt.dataset.categoria = p.categoria;
+      opt.dataset.precio = p.precio;
+      if (p.id === venta.productoId) opt.selected = true;
+      productoSelect.appendChild(opt);
+    });
+
+    // === AL CAMBIAR PRODUCTO → AUTO-SELECCIONA CATEGORÍA Y PRECIO ===
+    productoSelect.addEventListener("change", function() {
+      const selected = this.options[this.selectedIndex];
+      const cat = selected.dataset.categoria;
+      const precio = selected.dataset.precio;
+
+      categoriaSelect.value = cat;
+      precioInput.value = precio;
+    });
+
+    // === INICIALIZAR CATEGORÍA Y PRECIO ===
+    const selectedProd = productoSelect.options[productoSelect.selectedIndex];
+    if (selectedProd) {
+      categoriaSelect.value = selectedProd.dataset.categoria;
+      precioInput.value = selectedProd.dataset.precio;
+    }
+
+    // === GUARDAR EDICIÓN ===
+    document.getElementById("formEditar").onsubmit = function(e) {
+      e.preventDefault();
+
+      const clienteId = hiddenCliente.value;
+      const productoId = productoSelect.value;
+      const fecha = document.getElementById("fecha").value;
+
+      if (!clienteId || !productoId || !fecha) {
+        alert("Completa todos los campos.");
+        return;
+      }
+
+      const cliente = clientes.find(c => c.id === clienteId);
+      const producto = productos.find(p => p.id === productoId);
+
+      const indice = ventas.findIndex(v => v.id === id);
+      ventas[indice] = {
+        id, clienteId, clienteNombre: cliente.nombre,
+        productoId, productoNombre: producto.nombre, categoria: producto.categoria,
+        fecha, total: parseFloat(precioInput.value).toFixed(2)
+      };
+
+      localStorage.setItem("ventas", JSON.stringify(ventas));
+      alert("Venta actualizada.");
+      window.location.href = "ventas.html";
+    };
+  </script>
 </body>
 </html>
