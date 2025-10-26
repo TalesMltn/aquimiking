@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Editar Cliente - TecMerch</title>
   <link rel="stylesheet" href="../../../style/private/clientes/clientes_editar.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
+
 <body>
   <div class="contenedor">
     <aside class="sidebar">
@@ -36,10 +38,13 @@
         <input type="text" id="dni" maxlength="8" required>
 
         <label>Correo electrónico</label>
-        <input type="email" id="correo" required>
+        <input type="email" id="email" required>
 
         <label>Teléfono</label>
         <input type="tel" id="telefono" maxlength="9" required>
+
+        <label>Dirección</label>
+        <input type="text" id="direccion" required>
 
         <div class="acciones-form">
           <button type="submit" class="btn-guardar"><i class="bi bi-check-circle"></i> Actualizar</button>
@@ -51,58 +56,77 @@
 
   <!-- JAVASCRIPT: CARGAR Y EDITAR -->
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    if (!id) {
-      alert("Falta ID del cliente.");
-      window.location.href = "clientes.html";
-    }
-
-    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-    const cliente = clientes.find(c => c.id === id);
-    if (!cliente) {
-      alert("Cliente no encontrado.");
-      window.location.href = "clientes.html";
-    }
-
-    // Rellenar formulario
-    document.getElementById("id").value = cliente.id;
-    document.getElementById("nombre").value = cliente.nombre;
-    document.getElementById("dni").value = cliente.dni;
-    document.getElementById("correo").value = cliente.correo;
-    document.getElementById("telefono").value = cliente.telefono;
-
-    // Guardar cambios
-    document.getElementById("formEditar").onsubmit = function(e) {
-      e.preventDefault();
-
-      const nombre = document.getElementById("nombre").value.trim();
-      const dni = document.getElementById("dni").value.trim();
-      const correo = document.getElementById("correo").value.trim();
-      const telefono = document.getElementById("telefono").value.trim();
-
-      if (!nombre || !dni || !correo || !telefono) {
-        alert("Completa todos los campos.");
+    document.addEventListener("DOMContentLoaded", function () {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (!id) {
+        alert("Falta ID del cliente.");
+        window.location.href = "clientes.html";
         return;
       }
 
-      if (dni.length !== 8 || !/^\d+$/.test(dni)) {
-        alert("DNI debe tener 8 dígitos.");
+      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      const cliente = clientes.find(c => c.id === id);
+      if (!cliente) {
+        alert("Cliente no encontrado.");
+        window.location.href = "clientes.html";
         return;
       }
 
-      if (telefono.length !== 9 || !/^\d+$/.test(telefono)) {
-        alert("Teléfono debe tener 9 dígitos.");
-        return;
-      }
+      // Rellenar formulario
+      document.getElementById("id").value = cliente.id;
+      document.getElementById("nombre").value = cliente.nombre;
+      document.getElementById("dni").value = cliente.dni;
+      document.getElementById("email").value = cliente.email || '';
+      document.getElementById("telefono").value = cliente.telefono;
+      document.getElementById("direccion").value = cliente.direccion || '';
 
-      const indice = clientes.findIndex(c => c.id === id);
-      clientes[indice] = { id, nombre, dni, correo, telefono };
-      localStorage.setItem("clientes", JSON.stringify(clientes));
+      // Guardar cambios
+      document.getElementById("formEditar").onsubmit = function (e) {
+        e.preventDefault();
 
-      alert("Cliente actualizado.");
-      window.location.href = "clientes.html";
-    };
+        const nombre = document.getElementById("nombre").value.trim();
+        const dni = document.getElementById("dni").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const telefono = document.getElementById("telefono").value.trim();
+        const direccion = document.getElementById("direccion").value.trim();
+
+        if (!nombre || !dni || !email || !telefono || !direccion) {
+          alert("Completa todos los campos.");
+          return;
+        }
+
+        if (dni.length !== 8 || !/^\d+$/.test(dni)) {
+          alert("DNI debe tener 8 dígitos numéricos.");
+          return;
+        }
+
+        if (telefono.length !== 9 || !/^\d+$/.test(telefono)) {
+          alert("Teléfono debe tener 9 dígitos numéricos.");
+          return;
+        }
+
+        // Validar formato de correo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert("Por favor, ingresa un correo electrónico válido.");
+          return;
+        }
+
+        const indice = clientes.findIndex(c => c.id === id);
+        if (indice === -1) {
+          alert("Error al actualizar.");
+          return;
+        }
+
+        clientes[indice] = { id, nombre, dni, email, telefono, direccion };
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+
+        alert("Cliente actualizado correctamente.");
+        window.location.href = "clientes.html";
+      };
+    });
   </script>
 </body>
+
 </html>

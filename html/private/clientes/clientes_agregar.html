@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Agregar Cliente - TecMerch</title>
@@ -49,6 +50,7 @@
       box-shadow: 0 3px 8px rgba(39, 174, 96, 0.3);
       transition: all 0.2s ease;
     }
+
     .btn-guardar:hover {
       background: #1e8449;
       transform: translateY(-2px);
@@ -68,6 +70,7 @@
       box-shadow: 0 3px 8px rgba(231, 76, 60, 0.3);
       transition: all 0.2s ease;
     }
+
     .btn-cancelar:hover {
       background: #c0392b;
       transform: translateY(-2px);
@@ -75,6 +78,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="contenedor">
     <aside class="sidebar">
@@ -117,51 +121,70 @@
   </div>
 
   <script>
-    // === Generar ID automático ===
-    function generarIdCliente() {
-      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      const max = clientes.reduce((m, c) => Math.max(m, parseInt(c.id.replace("C", "")) || 0), 0);
-      return "C" + String(max + 1).padStart(3, "0");
-    }
+    document.addEventListener("DOMContentLoaded", function () {
+      // === Generar ID automático ===
+      function generarIdCliente() {
+        const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+        const max = clientes.reduce((m, c) => Math.max(m, parseInt(c.id.replace("C", "")) || 0), 0);
+        return "C" + String(max + 1).padStart(3, "0");
+      }
 
-    // === Guardar Cliente ===
-    document.getElementById("formCliente").onsubmit = function(e) {
-      e.preventDefault();
-
-      const nombre = document.getElementById("nombre").value.trim();
-      const dni = document.getElementById("dni").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const telefono = document.getElementById("telefono").value.trim();
-      const direccion = document.getElementById("direccion").value.trim();
-
-      if (!nombre || !dni || !email || !telefono || !direccion) {
-        alert("Completa todos los campos.");
+      // === Guardar Cliente ===
+      const form = document.getElementById("formCliente");
+      if (!form) {
+        console.error("No se encontró el formulario #formCliente");
         return;
       }
 
-      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      form.onsubmit = function (e) {
+        e.preventDefault();
 
-      // Verificar si el DNI ya existe
-      if (clientes.some(c => c.dni === dni)) {
-        alert("El DNI ingresado ya está registrado.");
-        return;
-      }
+        const nombre = document.getElementById("nombre")?.value.trim() || "";
+        const dni = document.getElementById("dni")?.value.trim() || "";
+        const emailInput = document.getElementById("email");
+        const email = emailInput?.value.trim() || "";
+        const telefono = document.getElementById("telefono")?.value.trim() || "";
+        const direccion = document.getElementById("direccion")?.value.trim() || "";
 
-      const nuevoCliente = {
-        id: generarIdCliente(),
-        nombre,
-        dni,
-        email,
-        telefono,
-        direccion
+        // Debug: verifica qué se está obteniendo
+        console.log({ nombre, dni, email, telefono, direccion });
+
+        if (!nombre || !dni || !email || !telefono || !direccion) {
+          alert("Completa todos los campos.");
+          return;
+        }
+
+        // Validar formato de correo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert("Por favor, ingresa un correo electrónico válido.");
+          return;
+        }
+
+        const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+
+        if (clientes.some(c => c.dni === dni)) {
+          alert("El DNI ingresado ya está registrado.");
+          return;
+        }
+
+        const nuevoCliente = {
+          id: generarIdCliente(),
+          nombre,
+          dni,
+          email,
+          telefono,
+          direccion
+        };
+
+        clientes.push(nuevoCliente);
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+
+        alert(`Cliente ${nuevoCliente.nombre} registrado correctamente.`);
+        window.location.href = "clientes.html";
       };
-
-      clientes.push(nuevoCliente);
-      localStorage.setItem("clientes", JSON.stringify(clientes));
-
-      alert(`Cliente ${nuevoCliente.nombre} registrado correctamente.`);
-      window.location.href = "clientes.html";
-    };
+    });
   </script>
 </body>
+
 </html>
